@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
     JuegoBantumi juegoBantumi;
     BantumiViewModel bantumiVM;
     int numInicialSemillas;
-//    MenuItem item;
+
+    boolean hasChange = false;
+    boolean havaInitialled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onChanged(Integer integer) {
                             mostrarValor(finalI, juegoBantumi.getSemillas(finalI));
+                            if (havaInitialled) hasChange = true;
                         }
                     });
         }
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(JuegoBantumi.Turno turno) {
                         marcarTurno(juegoBantumi.turnoActual());
+                        if(!havaInitialled) havaInitialled = true;
                     }
                 }
         );
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 //            case R.id.opcAjustes: // @todo Preferencias
 //                startActivity(new Intent(this, BantumiPrefs.class));
 //                return true;
-            case R.id.opcAcercaDe://规则
+            case R.id.opcAcercaDe://rules
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.aboutTitle)
                         .setMessage(R.string.aboutMessage)
@@ -130,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.opcReiniciarPartida:
                 //Resume the game
+                restart();
                 return true;
 
             case R.id.opcMejoresResultados:
@@ -216,6 +221,21 @@ public class MainActivity extends AppCompatActivity {
 
         // @TODO guardar puntuación
         new FinalAlertDialog().show(getSupportFragmentManager(), "ALERT_DIALOG");
+    }
+
+    private void restart(){
+        ProcedureAlertDialog.SuccessCallback callback = () ->{
+            hasChange = false;
+            havaInitialled = false;
+            bantumiVM.inicializar();
+            juegoBantumi.inicializa(JuegoBantumi.Turno.turnoJ1);
+            crearObservadores();
+        };
+        if (!hasChange){
+            callback.hashCode();
+            }else {
+            new ProcedureAlertDialog(callback,"Has iniciado el juego","¿Desea reinicial otra partida?").show(getSupportFragmentManager(),"ALERT_DIALOG");
+        }
     }
 
 
