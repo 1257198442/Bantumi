@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     JuegoBantumi juegoBantumi;
     BantumiViewModel bantumiVM;
     int numInicialSemillas;
+//    MenuItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,12 +120,32 @@ public class MainActivity extends AppCompatActivity {
 //            case R.id.opcAjustes: // @todo Preferencias
 //                startActivity(new Intent(this, BantumiPrefs.class));
 //                return true;
-            case R.id.opcAcercaDe:
+            case R.id.opcAcercaDe://规则
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.aboutTitle)
                         .setMessage(R.string.aboutMessage)
                         .setPositiveButton(android.R.string.ok, null)
                         .show();
+                return true;
+
+            case R.id.opcReiniciarPartida:
+                //Resume the game
+                return true;
+
+            case R.id.opcMejoresResultados:
+                //History
+                return true;
+
+            case R.id.opcAjustes:
+                //Change player name
+                return true;
+
+            case R.id.opcGuardarPartida:
+                //Save
+                return true;
+
+            case R.id.opcRecuperarPartida:
+                //Restart
                 return true;
 
             // @TODO!!! resto opciones
