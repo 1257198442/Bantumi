@@ -204,4 +204,10 @@ public class JuegoBantumi {
     public void deserializa(String juegoSerializado) {
         // @TODO
     }
+
+    public void inicializa(Turno turno){
+        if (campoVacio(Turno.turnoJ1) && campoVacio(Turno.turnoJ2)) {
+            inicializar(turno);
+        }
+    }
 }
