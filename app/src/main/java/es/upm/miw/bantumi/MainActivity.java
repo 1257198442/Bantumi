@@ -1,6 +1,7 @@
 package es.upm.miw.bantumi;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,7 +18,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 
+import es.upm.miw.bantumi.entity.SettingEntity;
 import es.upm.miw.bantumi.model.BantumiViewModel;
+import es.upm.miw.bantumi.view.SettingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     JuegoBantumi juegoBantumi;
     BantumiViewModel bantumiVM;
     int numInicialSemillas;
+    SettingEntity settingEntity;
 
     boolean hasChange = false;
     boolean havaInitialled = false;
@@ -33,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // Setting
+        settingEntity = SettingActivity.getSetting(this);
         // Instancia el ViewModel y el juego, y asigna observadores a los huecos
         numInicialSemillas = getResources().getInteger(R.integer.intNumInicialSemillas);
         bantumiVM = new ViewModelProvider(this).get(BantumiViewModel.class);
@@ -78,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
     private void marcarTurno(@NonNull JuegoBantumi.Turno turnoActual) {
         TextView tvJugador1 = findViewById(R.id.tvPlayer1);
         TextView tvJugador2 = findViewById(R.id.tvPlayer2);
+        if(settingEntity.jugador1_nombre != null && !settingEntity.jugador1_nombre.isEmpty()) tvJugador1.setText(settingEntity.jugador1_nombre);
+        if(settingEntity.jugador2_nombre != null && !settingEntity.jugador2_nombre.isEmpty()) tvJugador2.setText(settingEntity.jugador2_nombre);
         switch (turnoActual) {
             case turnoJ1:
                 tvJugador1.setTextColor(getColor(R.color.white));
@@ -143,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.opcAjustes:
                 //Change player name
+                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(settingIntent);
                 return true;
 
             case R.id.opcGuardarPartida:
