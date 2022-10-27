@@ -64,8 +64,8 @@ public class SettingActivity extends AppCompatActivity {
 
 
 
-        jugador1_nombre = findViewById(R.id.jugador1_nombre);
-        jugador2_nombre = findViewById(R.id.jugador2_nombre);
+        jugador1_nombre = findViewById(R.id.jugador1nombre);
+        jugador2_nombre = findViewById(R.id.jugador2nombre);
         jugador1_nombre.setHint(settingEntity.jugador1_nombre);
         jugador2_nombre.setHint(settingEntity.jugador2_nombre);
 

@@ -15,9 +15,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import es.upm.miw.bantumi.entity.DatodeTablero;
 import es.upm.miw.bantumi.entity.SettingEntity;
 import es.upm.miw.bantumi.model.BantumiViewModel;
 import es.upm.miw.bantumi.view.SettingActivity;
@@ -146,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.opcMejoresResultados:
                 //History
+
                 return true;
 
             case R.id.opcAjustes:
@@ -156,6 +165,22 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.opcGuardarPartida:
                 //Save
+                List<DatodeTablero> tableros = new ArrayList<>();
+                for(int sum=0;sum<JuegoBantumi.NUM_POSICIONES;sum++){
+                    DatodeTablero datodeTablero = new DatodeTablero(sum,juegoBantumi.getSemillas(sum));
+                    tableros.add(datodeTablero);
+                }
+                Gson g = new Gson();
+                String jsonDatoDeTablero = g.toJson(tableros);
+                try {
+                    FileOutputStream fileOutputStream = openFileOutput("BantumiDato.json",MODE_PRIVATE);
+                    fileOutputStream.write(jsonDatoDeTablero.getBytes(StandardCharsets.UTF_8));
+                    Snackbar.make(findViewById(R.id.opcGuardarPartida),"Guardado con éxito",Snackbar.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Snackbar.make(findViewById(R.id.opcGuardarPartida),"Error"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
+                }
+
+
                 return true;
 
             case R.id.opcRecuperarPartida:
