@@ -30,7 +30,7 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/jugador1_nombre"
+            android:id="@+id/jugador1nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -48,7 +48,7 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/jugador2_nombre"
+            android:id="@+id/jugador2nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
