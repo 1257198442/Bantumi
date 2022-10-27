@@ -11,15 +11,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.TextViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -148,13 +152,23 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.opcReiniciarPartida:
-                //Resume the game
-                restart();
+                //Restart
+                ProcedureAlertDialog.SuccessCallback callback = () ->{
+                    hasChange = false;
+                    havaInitialled = false;
+                    bantumiVM.inicializar();
+                    juegoBantumi.inicializa(JuegoBantumi.Turno.turnoJ1);
+                    crearObservadores();
+                };
+                if (!hasChange){
+                    callback.hashCode();
+                }else {
+                    new ProcedureAlertDialog(callback,"Has iniciado el juego","¿Desea reiniciar otra partida?").show(getSupportFragmentManager(),"ALERT_DIALOG");
+                }
                 return true;
 
             case R.id.opcMejoresResultados:
                 //History
-
                 return true;
 
             case R.id.opcAjustes:
@@ -184,10 +198,39 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.opcRecuperarPartida:
-                //Restart
+                //Resume the game
+                ProcedureAlertDialog.SuccessCallback successCallback = () -> {
+                    try {
+                        FileInputStream fileInputStream = openFileInput("BantumiDato.json");
+                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        String json;
+                        while ((json = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(json);
+                        }
+                        inputStreamReader.close();
+                        String jsonDato = stringBuilder.toString();
+                        Gson gson = new Gson();
+                        DatodeTablero[] datodeTableros = gson.fromJson(jsonDato, DatodeTablero[].class);
+                        for (DatodeTablero datodeTablero : datodeTableros) {
+                            juegoBantumi.setSemillas(datodeTablero.numero_de_piezas, datodeTablero.ubicacion);
+                        }
+                        Snackbar.make(findViewById(R.id.opcRecuperarPartida), "El juego ha respondido", Snackbar.LENGTH_SHORT).show();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                };
+                if (hasChange){
+
+                    new ProcedureAlertDialog(successCallback,"Has iniciado el juego","¿Desea reiniciar otra partida?").show(getSupportFragmentManager(),"ALERT_DIALOG");
+                }else {
+                    successCallback.succes();
+                }
                 return true;
 
-            // @TODO!!! resto opciones
+// @TODO!!! resto opciones
 
             default:
                 Snackbar.make(
@@ -256,21 +299,5 @@ public class MainActivity extends AppCompatActivity {
         // @TODO guardar puntuación
         new FinalAlertDialog().show(getSupportFragmentManager(), "ALERT_DIALOG");
     }
-
-    private void restart(){
-        ProcedureAlertDialog.SuccessCallback callback = () ->{
-            hasChange = false;
-            havaInitialled = false;
-            bantumiVM.inicializar();
-            juegoBantumi.inicializa(JuegoBantumi.Turno.turnoJ1);
-            crearObservadores();
-        };
-        if (!hasChange){
-            callback.hashCode();
-            }else {
-            new ProcedureAlertDialog(callback,"Has iniciado el juego","¿Desea reinicial otra partida?").show(getSupportFragmentManager(),"ALERT_DIALOG");
-        }
-    }
-
 
 }
