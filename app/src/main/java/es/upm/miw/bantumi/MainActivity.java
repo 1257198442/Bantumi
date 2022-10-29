@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.TextViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,27 +19,36 @@ import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import es.upm.miw.bantumi.db.Historia;
+import es.upm.miw.bantumi.db.RepoHistoriaSQLiteOpenHelper;
 import es.upm.miw.bantumi.entity.DatodeTablero;
 import es.upm.miw.bantumi.entity.SettingEntity;
 import es.upm.miw.bantumi.model.BantumiViewModel;
+import es.upm.miw.bantumi.view.HistoriaListActivity;
 import es.upm.miw.bantumi.view.SettingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static RepoHistoriaSQLiteOpenHelper db;
     protected final String LOG_TAG = "MiW";
     JuegoBantumi juegoBantumi;
     BantumiViewModel bantumiVM;
     int numInicialSemillas;
+
+
     SettingEntity settingEntity;
+    Historia historia;
+
 
     boolean hasChange = false;
     boolean havaInitialled = false;
@@ -55,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         numInicialSemillas = getResources().getInteger(R.integer.intNumInicialSemillas);
         bantumiVM = new ViewModelProvider(this).get(BantumiViewModel.class);
         juegoBantumi = new JuegoBantumi(bantumiVM, JuegoBantumi.Turno.turnoJ1, numInicialSemillas);
+        db = new RepoHistoriaSQLiteOpenHelper(getApplicationContext());
         crearObservadores();
     }
 
@@ -81,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(JuegoBantumi.Turno turno) {
                         marcarTurno(juegoBantumi.turnoActual());
-                        if(!havaInitialled) havaInitialled = true;
+                        if (!havaInitialled) havaInitialled = true;
                     }
                 }
         );
@@ -169,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.opcMejoresResultados:
                 //History
+                Intent intent = new Intent(MainActivity.this, HistoriaListActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.opcAjustes:
@@ -216,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                         for (DatodeTablero datodeTablero : datodeTableros) {
                             juegoBantumi.setSemillas(datodeTablero.numero_de_piezas, datodeTablero.ubicacion);
                         }
-                        Snackbar.make(findViewById(R.id.opcRecuperarPartida), "El juego ha respondido", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.tvPlayer1), "El juego ha respondido", Snackbar.LENGTH_SHORT).show();
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -286,18 +297,28 @@ public class MainActivity extends AppCompatActivity {
      * El juego ha terminado. Volver a jugar?
      */
     private void finJuego() {
+        TextView tvJugador1 = findViewById(R.id.tvPlayer1);
+        TextView tvJugador2 = findViewById(R.id.tvPlayer2);
         String texto = (juegoBantumi.getSemillas(6) > 6 * numInicialSemillas)
-                ? "Gana Jugador 1"
-                : "Gana Jugador 2";
+                ? "Gana " + tvJugador1.getText().toString()
+                : "Gana " + tvJugador2.getText().toString();
         Snackbar.make(
                 findViewById(android.R.id.content),
                 texto,
                 Snackbar.LENGTH_LONG
         )
         .show();
+       // @TODO guardar puntuación
 
-        // @TODO guardar puntuación
-        new FinalAlertDialog().show(getSupportFragmentManager(), "ALERT_DIALOG");
+        new FinalAlertDialog(() -> {
+            Historia historia = new Historia(tvJugador1.getText().toString(), juegoBantumi.getSemillas(6), tvJugador2.getText().toString(), juegoBantumi.getSemillas(13), getDate());
+            db.add(historia.getJuego1Nombre(), historia.getJuego1Numero(), historia.getJuego2Nombre(), historia.getJuego2Numero(), historia.getGanadores(), historia.getGanadoresNumero(), historia.getTiempo());
+        }).show(getSupportFragmentManager(), "ALERT_DIALOG");
+
+
     }
-
+    public String getDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date());
+    }
 }
