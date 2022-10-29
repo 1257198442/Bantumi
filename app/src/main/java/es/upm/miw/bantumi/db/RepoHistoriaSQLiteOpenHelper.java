@@ -95,6 +95,7 @@ public class RepoHistoriaSQLiteOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
     }
+
     public void delete(){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(TABLE_NAME,null,null);

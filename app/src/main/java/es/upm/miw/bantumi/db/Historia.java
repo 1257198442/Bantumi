@@ -1,6 +1,9 @@
 package es.upm.miw.bantumi.db;
 
+import androidx.annotation.NonNull;
+
 public class Historia {
+
     private int id;
     private String juego1Nombre;
     private int juego1Numero;
@@ -30,7 +33,7 @@ public class Historia {
         this.juego2Nombre = juego2Nombre;
         this.juego2Numero = juego2Numero;
         this.ganadores = juego1Numero > juego2Numero?juego1Nombre:juego2Nombre;
-        this.ganadoresNumero = juego1Numero > juego2Numero?juego1Numero:juego2Numero;
+        this.ganadoresNumero = Math.max(juego1Numero, juego2Numero);
         this.tiempo = tiempo;
     }
 
@@ -98,6 +101,7 @@ public class Historia {
         this.tiempo = tiempo;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Historia{" +

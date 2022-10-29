@@ -2,14 +2,17 @@ package es.upm.miw.bantumi;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import es.upm.miw.bantumi.MainActivity;
+
 public class ProcedureAlertDialog extends AppCompatDialogFragment {
 
     interface SuccessCallback {
-        void succes();
+        void onSucces();
     }
 
     SuccessCallback success;
@@ -22,9 +25,12 @@ public class ProcedureAlertDialog extends AppCompatDialogFragment {
         this.message = message;
     }
 
+    @NonNull
     public AppCompatDialog onCreateDialog(Bundle savedInstanceState){
 
         final MainActivity mainActivity =(MainActivity) getActivity();
+
+        assert mainActivity != null;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
         builder
@@ -32,9 +38,7 @@ public class ProcedureAlertDialog extends AppCompatDialogFragment {
             .setMessage(message)
             .setPositiveButton(
                  "Si",
-                 (Bantumidialog, which) ->{
-                 success.succes();
-                 }
+                 (Bantumidialog, which) -> success.onSucces()
                 )
             .setNegativeButton(
                  "No",

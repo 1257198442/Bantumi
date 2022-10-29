@@ -3,8 +3,11 @@ package es.upm.miw.bantumi.db;
 import android.provider.BaseColumns;
 
 public class HistoriaContract {
-    private HistoriaContract(){};
+
+    private HistoriaContract(){}
+
     public static abstract class tableHistoria implements BaseColumns{
+
         static final String TABLE_NAME                ="Historia";
 
         static final String COL_NAME_ID               =_ID;
@@ -15,5 +18,6 @@ public class HistoriaContract {
         static final String COL_NAME_GANADORES        ="ganadores";
         static final String COL_NAME_GANEDORESNUMERO  ="ganadoresNumero";
         static final String COL_NAME_TIEMPO           ="tiempo";
+
     }
 }

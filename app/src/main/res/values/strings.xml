@@ -49,4 +49,6 @@
     <string name="txtDialogoFinalAfirmativo">Sí</string>
     <string name="txtDialogoFinalNegativo">No</string>
 
+    <string name="warning">No Hay Hoistoria</string>
+
 </resources>
