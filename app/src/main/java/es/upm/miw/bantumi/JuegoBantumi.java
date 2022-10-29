@@ -31,8 +31,10 @@ public class JuegoBantumi {
      * @param numInicialSemillas Número de semillas al inicio del juego
      */
     public JuegoBantumi(BantumiViewModel bantumiVM, Turno turno, int numInicialSemillas) {
+
         this.bantumiVM = bantumiVM;
         this.numInicialSemillas = numInicialSemillas;
+
         if (campoVacio(Turno.turnoJ1) && campoVacio(Turno.turnoJ2)) { // Inicializa sólo si está vacío!!!
             inicializar(turno);
         }
@@ -180,7 +182,6 @@ public class JuegoBantumi {
     /**
      * Establece el turno
      *
-     * @param turno
      */
     public void setTurno(Turno turno) {
         bantumiVM.setTurno(turno);

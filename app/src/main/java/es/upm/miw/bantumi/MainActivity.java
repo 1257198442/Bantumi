@@ -1,5 +1,6 @@
 package es.upm.miw.bantumi;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,8 +35,8 @@ import es.upm.miw.bantumi.db.RepoHistoriaSQLiteOpenHelper;
 import es.upm.miw.bantumi.entity.DatodeTablero;
 import es.upm.miw.bantumi.entity.SettingEntity;
 import es.upm.miw.bantumi.model.BantumiViewModel;
-import es.upm.miw.bantumi.view.HistoriaListActivity;
-import es.upm.miw.bantumi.view.SettingActivity;
+import es.upm.miw.bantumi.activity.HistoriaListActivity;
+import es.upm.miw.bantumi.activity.SettingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,22 +77,16 @@ public class MainActivity extends AppCompatActivity {
             int finalI = i;
             bantumiVM.getNumSemillas(i).observe(    // Huecos y almacenes
                     this,
-                    new Observer<Integer>() {
-                        @Override
-                        public void onChanged(Integer integer) {
-                            mostrarValor(finalI, juegoBantumi.getSemillas(finalI));
-                            if (havaInitialled) hasChange = true;
-                        }
+                    integer -> {
+                        mostrarValor(finalI, juegoBantumi.getSemillas(finalI));
+                        if (havaInitialled) hasChange = true;
                     });
         }
         bantumiVM.getTurno().observe(   // Turno
                 this,
-                new Observer<JuegoBantumi.Turno>() {
-                    @Override
-                    public void onChanged(JuegoBantumi.Turno turno) {
-                        marcarTurno(juegoBantumi.turnoActual());
-                        if (!havaInitialled) havaInitialled = true;
-                    }
+                turno -> {
+                    marcarTurno(juegoBantumi.turnoActual());
+                    if (!havaInitialled) havaInitialled = true;
                 }
         );
     }
@@ -147,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 //            case R.id.opcAjustes: // @todo Preferencias
@@ -204,8 +200,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     Snackbar.make(findViewById(R.id.opcGuardarPartida),"Error"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
                 }
-
-
                 return true;
 
             case R.id.opcRecuperarPartida:
@@ -234,15 +228,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 if (hasChange){
-
                     new ProcedureAlertDialog(successCallback,"Has iniciado el juego","¿Desea reiniciar otra partida?").show(getSupportFragmentManager(),"ALERT_DIALOG");
                 }else {
-                    successCallback.succes();
+                    successCallback.onSucces();
                 }
                 return true;
 
 // @TODO!!! resto opciones
-
             default:
                 Snackbar.make(
                         findViewById(android.R.id.content),
@@ -259,8 +251,10 @@ public class MainActivity extends AppCompatActivity {
      * @param v Vista pulsada (hueco)
      */
     public void huecoPulsado(@NonNull View v) {
+
         String resourceName = getResources().getResourceEntryName(v.getId()); // pXY
         int num = Integer.parseInt(resourceName.substring(resourceName.length() - 2));
+
         Log.i(LOG_TAG, "huecoPulsado(" + resourceName + ") num=" + num);
         switch (juegoBantumi.turnoActual()) {
             case turnoJ1:
@@ -282,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
      * Si mantiene turno -> vuelve a jugar
      */
     void juegaComputador() {
+
         while (juegoBantumi.turnoActual() == JuegoBantumi.Turno.turnoJ2) {
             int pos = 7 + (int) (Math.random() * 6);    // posición aleatoria
             Log.i(LOG_TAG, "juegaComputador(), pos=" + pos);
@@ -297,8 +292,10 @@ public class MainActivity extends AppCompatActivity {
      * El juego ha terminado. Volver a jugar?
      */
     private void finJuego() {
+
         TextView tvJugador1 = findViewById(R.id.tvPlayer1);
         TextView tvJugador2 = findViewById(R.id.tvPlayer2);
+
         String texto = (juegoBantumi.getSemillas(6) > 6 * numInicialSemillas)
                 ? "Gana " + tvJugador1.getText().toString()
                 : "Gana " + tvJugador2.getText().toString();
@@ -309,15 +306,14 @@ public class MainActivity extends AppCompatActivity {
         )
         .show();
        // @TODO guardar puntuación
-
         new FinalAlertDialog(() -> {
             Historia historia = new Historia(tvJugador1.getText().toString(), juegoBantumi.getSemillas(6), tvJugador2.getText().toString(), juegoBantumi.getSemillas(13), getDate());
             db.add(historia.getJuego1Nombre(), historia.getJuego1Numero(), historia.getJuego2Nombre(), historia.getJuego2Numero(), historia.getGanadores(), historia.getGanadoresNumero(), historia.getTiempo());
         }).show(getSupportFragmentManager(), "ALERT_DIALOG");
-
-
     }
+
     public String getDate(){
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date());
     }

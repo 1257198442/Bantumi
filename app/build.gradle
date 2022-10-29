@@ -4,12 +4,12 @@ plugins {
 
 android {
 	namespace 'es.upm.miw.bantumi'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "es.upm.miw.bantumi"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
     }
@@ -31,7 +31,7 @@ dependencies {
     def lifecycle_version = "2.5.1"
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // ViewModel
@@ -39,5 +39,5 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     // Gson
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.code.gson:gson:2.8.9'
 }

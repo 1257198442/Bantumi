@@ -1,6 +1,4 @@
-package es.upm.miw.bantumi.view;
-
-import static java.lang.System.in;
+package es.upm.miw.bantumi.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -27,6 +25,7 @@ import es.upm.miw.bantumi.R;
 import es.upm.miw.bantumi.entity.SettingEntity;
 
 public class SettingActivity extends AppCompatActivity {
+
     EditText jugador1_nombre;
     EditText jugador2_nombre;
 
@@ -61,8 +60,6 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         SettingEntity settingEntity = getSetting(this);
-
-
 
         jugador1_nombre = findViewById(R.id.jugador1nombre);
         jugador2_nombre = findViewById(R.id.jugador2nombre);

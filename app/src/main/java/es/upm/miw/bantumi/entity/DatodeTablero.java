@@ -1,6 +1,7 @@
 package es.upm.miw.bantumi.entity;
 
 public class DatodeTablero {
+
     public int numero_de_piezas;
     public int ubicacion;
 

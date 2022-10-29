@@ -1,4 +1,4 @@
-package es.upm.miw.bantumi;
+package es.upm.miw.bantumi.component;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,8 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import es.upm.miw.bantumi.R;
+
 public class ComparedComponent extends LinearLayout {
+
     private final View target;
+
     public ComparedComponent(Context context) {
         this(context, null);
     }
@@ -38,18 +42,22 @@ public class ComparedComponent extends LinearLayout {
         TextView player = target.findViewById(R.id.juego_2_Nombre);
         player.setText(name);
     }
+
     public void setJuego2Numero(String text) {
         TextView data = target.findViewById(R.id.juego_2_numero);
         data.setText(text);
     }
+
     public void setGanadoresNombre(String text) {
         TextView data = target.findViewById(R.id.ganadores_nombre);
         data.setText(text);
     }
+
     public void setGanadoresNumero(String text) {
         TextView data = target.findViewById(R.id.ganadores_numero);
         data.setText(text);
     }
+
     public void settiempo(String text) {
         TextView data = target.findViewById(R.id.tiempo);
         data.setText(text);
