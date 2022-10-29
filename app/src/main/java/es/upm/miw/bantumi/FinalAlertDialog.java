@@ -9,6 +9,13 @@ import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class FinalAlertDialog extends AppCompatDialogFragment {
+    interface SuccessCallback {
+        void Success();
+    }
+    SuccessCallback successCallbacks;
+    public FinalAlertDialog(SuccessCallback successCallback){
+       successCallbacks = successCallback;
+    }
     @NonNull
     @Override
 	public AppCompatDialog onCreateDialog(Bundle savedInstanceState) {
