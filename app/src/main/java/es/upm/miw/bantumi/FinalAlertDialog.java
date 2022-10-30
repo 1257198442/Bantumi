@@ -16,7 +16,7 @@ public class FinalAlertDialog extends AppCompatDialogFragment {
     interface SuccessCallback {
         void Success();
     }
-
+    SuccessCallback successCallback;
     public FinalAlertDialog(SuccessCallback successCallback){
        successCallbacks = successCallback;
     }
@@ -34,10 +34,22 @@ public class FinalAlertDialog extends AppCompatDialogFragment {
             .setMessage(R.string.txtDialogoFinalPregunta)
             .setPositiveButton(
                 getString(R.string.txtDialogoFinalAfirmativo),
-                    (dialog, which) -> main.juegoBantumi.inicializar(JuegoBantumi.Turno.turnoJ1)
-            ).setNegativeButton(
-                getString(R.string.txtDialogoFinalNegativo),
-                        (dialog, which) -> main.finish()
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            successCallback.Success();
+                            main.juegoBantumi.inicializar(JuegoBantumi.Turno.turnoJ1);
+                        }
+                    }
+            )
+                .setNegativeButton(
+                        getString(R.string.txtDialogoFinalNegativo),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                main.finish();
+                            }
+                        }
                 );
 		return builder.create();
 	}
