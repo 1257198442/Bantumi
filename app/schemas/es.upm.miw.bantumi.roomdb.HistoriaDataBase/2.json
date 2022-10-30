@@ -1,0 +1,76 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "b189cc305bcb572edcd85739dc4c54c6",
+    "entities": [
+      {
+        "tableName": "Historia",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `juego1Nombre` TEXT, `juego1Numero` INTEGER NOT NULL, `juego2Nombre` TEXT, `juego2Numero` INTEGER NOT NULL, `ganadores` TEXT, `ganadoresNumero` INTEGER NOT NULL, `tiempo` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "juego1Nombre",
+            "columnName": "juego1Nombre",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "juego1Numero",
+            "columnName": "juego1Numero",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "juego2Nombre",
+            "columnName": "juego2Nombre",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "juego2Numero",
+            "columnName": "juego2Numero",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ganadores",
+            "columnName": "ganadores",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ganadoresNumero",
+            "columnName": "ganadoresNumero",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tiempo",
+            "columnName": "tiempo",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b189cc305bcb572edcd85739dc4c54c6')"
+    ]
+  }
+}
