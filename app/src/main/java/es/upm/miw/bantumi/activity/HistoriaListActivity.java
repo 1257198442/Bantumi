@@ -16,21 +16,28 @@ import java.util.List;
 
 import es.upm.miw.bantumi.component.ComparedComponent;
 import es.upm.miw.bantumi.R;
-import es.upm.miw.bantumi.db.Historia;
-import es.upm.miw.bantumi.db.RepoHistoriaSQLiteOpenHelper;
+import es.upm.miw.bantumi.roomdb.HistoriaDO;
+import es.upm.miw.bantumi.roomdb.HistoriaDao;
+import es.upm.miw.bantumi.roomdb.HistoriaDataBase;
+import es.upm.miw.bantumi.sqlitedb.Historia;
+import es.upm.miw.bantumi.sqlitedb.RepoHistoriaSQLiteOpenHelper;
 
 public class HistoriaListActivity extends AppCompatActivity {
-
-    RepoHistoriaSQLiteOpenHelper db;
-    List<Historia> list;
+    //sqlite
+//    RepoHistoriaSQLiteOpenHelper db;
+//    List<Historia> list;
+    HistoriaDao historiaDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.historia_list);
-        this.db = new RepoHistoriaSQLiteOpenHelper(getApplicationContext());
-        list = this.db.getAll();
+
+        //sqlite
+//        this.db = new RepoHistoriaSQLiteOpenHelper(getApplicationContext());
+//        list = this.db.getAll();
+        historiaDao = HistoriaDataBase.getInstance(this).getHistoriaDao();
+        List<HistoriaDO> list = historiaDao.getAll();
         load(list);
     }
 
@@ -42,7 +49,9 @@ public class HistoriaListActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void load(@Nullable List<Historia> list) {
+    //sqlite
+//    public void load(@Nullable List<Historia> list) {
+    public void load(@Nullable List<HistoriaDO> list) {
         LinearLayout hlist = findViewById(R.id.list);
         hlist.removeAllViews();
         if (list != null && list.size() > 0) {
@@ -73,7 +82,10 @@ public class HistoriaListActivity extends AppCompatActivity {
     @SuppressLint("NonConstantResourceId")
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.opcBorrarResultados) {
-            db.delete();
+            //sqlite
+//            db.delete();
+            historiaDao = HistoriaDataBase.getInstance(this).getHistoriaDao();
+            historiaDao.deleteAll();
             load(null);
             return true;
         }
