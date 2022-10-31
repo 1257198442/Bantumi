@@ -16,7 +16,6 @@ public class FinalAlertDialog extends AppCompatDialogFragment {
     interface SuccessCallback {
         void Success();
     }
-    SuccessCallback successCallback;
     public FinalAlertDialog(SuccessCallback successCallback){
        successCallbacks = successCallback;
     }
@@ -27,7 +26,7 @@ public class FinalAlertDialog extends AppCompatDialogFragment {
 	public AppCompatDialog onCreateDialog(Bundle savedInstanceState) {
 		final MainActivity main = (MainActivity) getActivity();
 
-        assert main != null;
+//        assert main != null;
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
         builder
             .setTitle(R.string.txtDialogoFinalTitulo)
@@ -37,7 +36,7 @@ public class FinalAlertDialog extends AppCompatDialogFragment {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            successCallback.Success();
+                            successCallbacks.Success();
                             main.juegoBantumi.inicializar(JuegoBantumi.Turno.turnoJ1);
                         }
                     }

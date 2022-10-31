@@ -1,4 +1,4 @@
-package es.upm.miw.bantumi.db;
+package es.upm.miw.bantumi.sqlitedb;
 
 import androidx.annotation.NonNull;
 

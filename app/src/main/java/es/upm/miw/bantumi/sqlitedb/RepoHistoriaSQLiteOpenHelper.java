@@ -1,14 +1,14 @@
-package es.upm.miw.bantumi.db;
+package es.upm.miw.bantumi.sqlitedb;
 
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.COL_NAME_GANADORES;
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.COL_NAME_GANEDORESNUMERO;
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.COL_NAME_ID;
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.COL_NAME_JUEGO_1_NOMBRE;
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.COL_NAME_JUEGO_1_NUMERO;
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.COL_NAME_JUEGO_2_NOMBRE;
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.COL_NAME_JUEGO_2_NUMERO;
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.COL_NAME_TIEMPO;
-import static es.upm.miw.bantumi.db.HistoriaContract.tableHistoria.TABLE_NAME;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.COL_NAME_GANADORES;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.COL_NAME_GANEDORESNUMERO;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.COL_NAME_ID;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.COL_NAME_JUEGO_1_NOMBRE;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.COL_NAME_JUEGO_1_NUMERO;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.COL_NAME_JUEGO_2_NOMBRE;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.COL_NAME_JUEGO_2_NUMERO;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.COL_NAME_TIEMPO;
+import static es.upm.miw.bantumi.sqlitedb.HistoriaContract.tableHistoria.TABLE_NAME;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;

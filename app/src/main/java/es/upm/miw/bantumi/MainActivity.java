@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -30,8 +29,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import es.upm.miw.bantumi.db.Historia;
-import es.upm.miw.bantumi.db.RepoHistoriaSQLiteOpenHelper;
+import es.upm.miw.bantumi.roomdb.HistoriaDO;
+import es.upm.miw.bantumi.roomdb.HistoriaDao;
+import es.upm.miw.bantumi.roomdb.HistoriaDataBase;
+import es.upm.miw.bantumi.sqlitedb.Historia;
+import es.upm.miw.bantumi.sqlitedb.RepoHistoriaSQLiteOpenHelper;
 import es.upm.miw.bantumi.entity.DatodeTablero;
 import es.upm.miw.bantumi.entity.SettingEntity;
 import es.upm.miw.bantumi.model.BantumiViewModel;
@@ -40,15 +42,18 @@ import es.upm.miw.bantumi.activity.SettingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static RepoHistoriaSQLiteOpenHelper db;
+
     protected final String LOG_TAG = "MiW";
     JuegoBantumi juegoBantumi;
     BantumiViewModel bantumiVM;
     int numInicialSemillas;
 
-
+    //sqlite
+//    public static RepoHistoriaSQLiteOpenHelper db;
+//    Historia historia;
+    HistoriaDataBase historiaDataBase;
+    HistoriaDao historiaDao;
     SettingEntity settingEntity;
-    Historia historia;
 
 
     boolean hasChange = false;
@@ -64,7 +69,10 @@ public class MainActivity extends AppCompatActivity {
         numInicialSemillas = getResources().getInteger(R.integer.intNumInicialSemillas);
         bantumiVM = new ViewModelProvider(this).get(BantumiViewModel.class);
         juegoBantumi = new JuegoBantumi(bantumiVM, JuegoBantumi.Turno.turnoJ1, numInicialSemillas);
-        db = new RepoHistoriaSQLiteOpenHelper(getApplicationContext());
+        //sqlite
+//        db = new RepoHistoriaSQLiteOpenHelper(getApplicationContext());
+        historiaDataBase = HistoriaDataBase.getInstance(this);
+        historiaDao = historiaDataBase.getHistoriaDao();
         crearObservadores();
     }
 
@@ -254,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
 
         String resourceName = getResources().getResourceEntryName(v.getId()); // pXY
         int num = Integer.parseInt(resourceName.substring(resourceName.length() - 2));
-
         Log.i(LOG_TAG, "huecoPulsado(" + resourceName + ") num=" + num);
         switch (juegoBantumi.turnoActual()) {
             case turnoJ1:
@@ -306,9 +313,13 @@ public class MainActivity extends AppCompatActivity {
         )
         .show();
        // @TODO guardar puntuación
+        HistoriaDO historiaDO = new HistoriaDO(tvJugador1.getText().toString(), juegoBantumi.getSemillas(6), tvJugador2.getText().toString(), juegoBantumi.getSemillas(13), getDate());
+        historiaDao.insert(historiaDO);
         new FinalAlertDialog(() -> {
-            Historia historia = new Historia(tvJugador1.getText().toString(), juegoBantumi.getSemillas(6), tvJugador2.getText().toString(), juegoBantumi.getSemillas(13), getDate());
-            db.add(historia.getJuego1Nombre(), historia.getJuego1Numero(), historia.getJuego2Nombre(), historia.getJuego2Numero(), historia.getGanadores(), historia.getGanadoresNumero(), historia.getTiempo());
+            //sqlite
+//            Historia historia = new Historia(tvJugador1.getText().toString(), juegoBantumi.getSemillas(6), tvJugador2.getText().toString(), juegoBantumi.getSemillas(13), getDate());
+//            db.add(historia.getJuego1Nombre(), historia.getJuego1Numero(), historia.getJuego2Nombre(), historia.getJuego2Numero(), historia.getGanadores(), historia.getGanadoresNumero(), historia.getTiempo());
+
         }).show(getSupportFragmentManager(), "ALERT_DIALOG");
     }
 
