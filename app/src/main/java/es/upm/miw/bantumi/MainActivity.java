@@ -2,12 +2,15 @@ package es.upm.miw.bantumi;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import es.upm.miw.bantumi.roomdb.HistoriaDO;
 import es.upm.miw.bantumi.roomdb.HistoriaDao;
@@ -170,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                     hasChange = false;
                     havaInitialled = false;
                     bantumiVM.inicializar();
+                    juegoBantumi = new JuegoBantumi(bantumiVM, JuegoBantumi.Turno.turnoJ1, numInicialSemillas);
                     juegoBantumi.inicializa(JuegoBantumi.Turno.turnoJ1);
                     crearObservadores();
                 };
@@ -240,6 +245,9 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     successCallback.onSucces();
                 }
+                return true;
+            case R.id.opcModifySemillas:
+                    showExitDialog("Introduzca el número de semilla(0-1000)");
                 return true;
 
 // @TODO!!! resto opciones
@@ -314,18 +322,63 @@ public class MainActivity extends AppCompatActivity {
         .show();
        // @TODO guardar puntuación
         HistoriaDO historiaDO = new HistoriaDO(tvJugador1.getText().toString(), juegoBantumi.getSemillas(6), tvJugador2.getText().toString(), juegoBantumi.getSemillas(13), getDate());
-        historiaDao.insert(historiaDO);
-        new FinalAlertDialog(() -> {
-            //sqlite
+        if(historiaDO.getGanadoresNumero()!=0){
+            new FinalAlertDialog(() -> {
+                //sqlite
 //            Historia historia = new Historia(tvJugador1.getText().toString(), juegoBantumi.getSemillas(6), tvJugador2.getText().toString(), juegoBantumi.getSemillas(13), getDate());
 //            db.add(historia.getJuego1Nombre(), historia.getJuego1Numero(), historia.getJuego2Nombre(), historia.getJuego2Numero(), historia.getGanadores(), historia.getGanadoresNumero(), historia.getTiempo());
-
-        }).show(getSupportFragmentManager(), "ALERT_DIALOG");
+                historiaDao.insert(historiaDO);
+            }).show(getSupportFragmentManager(), "ALERT_DIALOG");
+        }
     }
 
     public String getDate(){
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date());
+    }
+
+    private void showExitDialog(String str){
+        final EditText edt = new EditText(this);
+        edt.setMinLines(1);
+        new AlertDialog.Builder(this)
+                .setTitle(str)
+                .setView(edt)
+                .setPositiveButton("Determinar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        String number = edt.getText().toString();
+                        if(setNumInicialSemillas(number)){
+                            Snackbar.make(
+                                    findViewById(android.R.id.content),
+                                    "Entrará en vigor en el próximo bantumi",
+                                    Snackbar.LENGTH_LONG
+                            ).show();
+                        }else {
+                            showExitDialog("Los número introducidos son incorrectos");
+                        }
+
+                    }
+                })
+                .setNegativeButton("Anulación", null)
+                .show();
+
+    }
+    public static boolean isNumeric(String str){
+        return str.matches("^([1-9][0-9]{0,2})");
+
+    }
+
+    public boolean setNumInicialSemillas(String number){
+        if(isNumeric(number)){
+            this.numInicialSemillas = Integer.parseInt(number);
+            if(!hasChange){
+                juegoBantumi = new JuegoBantumi(bantumiVM, JuegoBantumi.Turno.turnoJ1, numInicialSemillas);
+                crearObservadores();
+//                juegoBantumi.inicializar(JuegoBantumi.Turno.turnoJ1);
+            }
+            return true;
+        }else {
+            return false;
+        }
     }
 }

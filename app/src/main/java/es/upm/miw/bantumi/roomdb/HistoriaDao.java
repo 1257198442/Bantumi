@@ -11,10 +11,10 @@ import java.util.List;
 @Dao
 public interface HistoriaDao {
     static final String TABLE_NAME                ="Historia";
-    static final String COL_NAME_GANADORES        ="ganadores";
+    static final String COL_NAME_GANADORESNUMERO        ="ganadoresNumero";
 
 
-    @Query(" SELECT * FROM " + TABLE_NAME + " ORDER BY "+ COL_NAME_GANADORES + " DESC LIMIT 0,10 ")
+    @Query(" SELECT * FROM " + TABLE_NAME + " ORDER BY "+ COL_NAME_GANADORESNUMERO + " DESC LIMIT 0,10 ")
     List<HistoriaDO> getAll();
 
     @Insert

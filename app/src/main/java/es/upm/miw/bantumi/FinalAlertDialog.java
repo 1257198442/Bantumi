@@ -25,7 +25,7 @@ public class FinalAlertDialog extends AppCompatDialogFragment {
     @Override
 	public AppCompatDialog onCreateDialog(Bundle savedInstanceState) {
 		final MainActivity main = (MainActivity) getActivity();
-
+        setCancelable(false);
 //        assert main != null;
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
         builder
