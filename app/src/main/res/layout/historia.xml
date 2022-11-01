@@ -15,11 +15,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="14dp"
+                android:layout_width="40dp"
                 android:layout_height="53dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Ganadores"
+                android:text="Ganadores:"
                 android:textSize="20sp" />
 
             <TextView
@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="Player1"
-                android:textColor="#FFC107"
+                android:textColor="@color/orange"
                 android:textSize="20sp" />
 
             <TextView

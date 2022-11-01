@@ -3,6 +3,7 @@ package es.upm.miw.bantumi.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -91,5 +92,14 @@ public class SettingActivity extends AppCompatActivity {
                 ).show();
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+
     }
 }
