@@ -10,7 +10,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,7 +49,6 @@ import es.upm.miw.bantumi.activity.SettingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-
     protected final String LOG_TAG = "MiW";
     JuegoBantumi juegoBantumi;
     BantumiViewModel bantumiVM;
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     HistoriaDataBase historiaDataBase;
     HistoriaDao historiaDao;
     SettingEntity settingEntity;
-
+    JuegoBantumi.Turno jugador;
 
     boolean hasChange = false;
     boolean havaInitialled = false;
@@ -67,12 +69,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.jugador = JuegoBantumi.Turno.turnoJ1;
         // Setting
         settingEntity = SettingActivity.getSetting(this);
         // Instancia el ViewModel y el juego, y asigna observadores a los huecos
         numInicialSemillas = getResources().getInteger(R.integer.intNumInicialSemillas);
         bantumiVM = new ViewModelProvider(this).get(BantumiViewModel.class);
-        juegoBantumi = new JuegoBantumi(bantumiVM, JuegoBantumi.Turno.turnoJ1, numInicialSemillas);
+        juegoBantumi = new JuegoBantumi(bantumiVM, jugador, numInicialSemillas);
         //sqlite
 //        db = new RepoHistoriaSQLiteOpenHelper(getApplicationContext());
         historiaDataBase = HistoriaDataBase.getInstance(this);
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("NonConstantResourceId")
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.opcAjustes: // @todo Preferencias
+//            case R.id.opcAjustes: //
 //                startActivity(new Intent(this, BantumiPrefs.class));
 //                return true;
             case R.id.opcAcercaDe://rules
@@ -174,8 +178,8 @@ public class MainActivity extends AppCompatActivity {
                     hasChange = false;
                     havaInitialled = false;
                     bantumiVM.inicializar();
-                    juegoBantumi = new JuegoBantumi(bantumiVM, JuegoBantumi.Turno.turnoJ1, numInicialSemillas);
-                    juegoBantumi.inicializa(JuegoBantumi.Turno.turnoJ1);
+                    juegoBantumi = new JuegoBantumi(bantumiVM, jugador, numInicialSemillas);
+                    juegoBantumi.inicializa(jugador);
                     crearObservadores();
                 };
                 if (!hasChange){
@@ -247,7 +251,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.opcModifySemillas:
-                    showExitDialog("Introduzca el número de semilla(0-1000)");
+                    showSelectDialog("Introduzca el número de semilla(0-1000)");
+                return true;
+
+            case R.id.opcordenConmutacion:
+                    showSelectDialog();
                 return true;
 
 // @TODO!!! resto opciones
@@ -320,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG
         )
         .show();
-       // @TODO guardar puntuación
+
         HistoriaDO historiaDO = new HistoriaDO(tvJugador1.getText().toString(), juegoBantumi.getSemillas(6), tvJugador2.getText().toString(), juegoBantumi.getSemillas(13), getDate());
         if(historiaDO.getGanadoresNumero()!=0){
             new FinalAlertDialog(() -> {
@@ -338,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
         return sdf.format(new Date());
     }
 
-    private void showExitDialog(String str){
+    private void showSelectDialog(String str){
         final EditText edt = new EditText(this);
         edt.setMinLines(1);
         new AlertDialog.Builder(this)
@@ -354,15 +362,14 @@ public class MainActivity extends AppCompatActivity {
                                     Snackbar.LENGTH_LONG
                             ).show();
                         }else {
-                            showExitDialog("Los número introducidos son incorrectos");
+                            showSelectDialog("Los número introducidos son incorrectos");
                         }
-
                     }
                 })
                 .setNegativeButton("Anulación", null)
                 .show();
-
     }
+
     public static boolean isNumeric(String str){
         return str.matches("^([1-9][0-9]{0,2})");
 
@@ -374,11 +381,52 @@ public class MainActivity extends AppCompatActivity {
             if(!hasChange){
                 juegoBantumi = new JuegoBantumi(bantumiVM, JuegoBantumi.Turno.turnoJ1, numInicialSemillas);
                 crearObservadores();
-//                juegoBantumi.inicializar(JuegoBantumi.Turno.turnoJ1);
             }
             return true;
         }else {
             return false;
         }
+    }
+
+    private void showSelectDialog(){
+        TextView tvJugador1 = findViewById(R.id.tvPlayer1);
+        TextView tvJugador2 = findViewById(R.id.tvPlayer2);
+        new AlertDialog.Builder(this)
+                .setTitle("Seleccione un jugador como el primer jugador")
+                .setPositiveButton(tvJugador1.getText().toString(), (arg0, arg1) -> {
+                    if (!hasChange){
+                        cambioJugador(0);
+                        juegoBantumi.inicializar(jugador);
+                        juegoBantumi = new JuegoBantumi(bantumiVM, jugador, numInicialSemillas);
+                        marcarTurno(jugador);
+                        hasChange = false;
+                    }else {
+                        Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "Entrará en vigor en el próximo bantumi",
+                                Snackbar.LENGTH_LONG
+                        ).show();
+                    }
+                })
+                .setNegativeButton(tvJugador2.getText().toString(), (arg0, arg1) -> {
+                    if (!hasChange){
+                        cambioJugador(1);
+                        juegoBantumi.inicializar(jugador);
+                        juegoBantumi = new JuegoBantumi(bantumiVM, jugador, numInicialSemillas);
+                        marcarTurno(jugador);
+                        hasChange = false;
+                    }else {
+                        Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "Entrará en vigor en el próximo bantumi",
+                                Snackbar.LENGTH_LONG
+                        ).show();
+                    }
+                })
+                .show();
+    }
+
+    public void cambioJugador(int id){
+        this.jugador = JuegoBantumi.Turno.values()[id];
     }
 }

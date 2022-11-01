@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/opcordenConmutacion"
+        android:title="Modificar orden de juego"
+        android:orderInCategory="30"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/opcReiniciarPartida"
         android:title="@string/txtReiniciarPartida"
         android:icon="@android:drawable/ic_menu_rotate"
