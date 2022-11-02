@@ -25,7 +25,7 @@
             android:layout_height="35dp"
             android:background="#FE9700"
             android:gravity="center_vertical"
-            android:text="Nombre de jugador 1:"
+            android:text="@string/nombreDeJugador1"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
@@ -43,7 +43,7 @@
             android:layout_height="35dp"
             android:background="#FE9700"
             android:gravity="center_vertical"
-            android:text="Nombre de jugador 2:"
+            android:text="@string/nombreDeJugador2"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
@@ -60,5 +60,5 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/confirmar" />
 </LinearLayout>

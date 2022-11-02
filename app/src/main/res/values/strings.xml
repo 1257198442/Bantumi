@@ -17,6 +17,9 @@
     <string name="txtOpcionGuardar">Guardar Partida</string>
     <string name="txtOpcionRecuperar">Recuperar Partida</string>
     <string name="txtOpcionMejoresResultados">Mejores Resultados</string>
+    <string name="txtModificarOrdenDeJuego">Modificar orden de juego</string>
+    <string name="txtModifyNúmeroInicialDeSemillas">Modify número inicial de semillas</string>
+    <string name="BorrarResultados">Borrar Resultados</string>
 
     <!-- Acerca de -->
     <string name="aboutText">Acerca de</string>
@@ -48,7 +51,12 @@
     <string name="txtDialogoFinalPregunta">¿Desea jugar otra partida?</string>
     <string name="txtDialogoFinalAfirmativo">Sí</string>
     <string name="txtDialogoFinalNegativo">No</string>
-
+    <!-- Historia -->
     <string name="warning">No Hay Hoistoria</string>
-
+    <string name="ganadores">Ganadores:</string>
+    <string name="vs">VS</string>
+    <!-- Setting -->
+    <string name="nombreDeJugador1">Nombre de jugador 1:</string>
+    <string name="nombreDeJugador2">Nombre de jugador 2:</string>
+    <string name="confirmar">Confirmar</string>
 </resources>

@@ -4,14 +4,14 @@
 
     <item
         android:id="@+id/opcModifySemillas"
-        android:title="Modify número inicial de semillas"
-        android:orderInCategory="25"
+        android:title="@string/txtModifyNúmeroInicialDeSemillas"
+        android:orderInCategory="30"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/opcordenConmutacion"
-        android:title="Modificar orden de juego"
-        android:orderInCategory="30"
+        android:title="@string/txtModificarOrdenDeJuego"
+        android:orderInCategory="35"
         app:showAsAction="ifRoom" />
 
     <item
@@ -48,7 +48,7 @@
         android:id="@+id/opcAjustes"
         android:title="@string/preferencesText"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:orderInCategory="100"
+        android:orderInCategory="25"
         />
 
     <item

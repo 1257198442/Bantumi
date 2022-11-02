@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     HistoriaDataBase historiaDataBase;
     HistoriaDao historiaDao;
     SettingEntity settingEntity;
-    JuegoBantumi.Turno jugador;
+    static JuegoBantumi.Turno jugador;
 
     boolean hasChange = false;
     boolean havaInitialled = false;
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.opcModifySemillas:
-                    showSelectDialog("Introduzca el número de semilla(0-1000)");
+                    showSelectDialog("Introduzca el número de semilla(0-999)");
                 return true;
 
             case R.id.opcordenConmutacion:

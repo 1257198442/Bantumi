@@ -37,7 +37,7 @@ public class FinalAlertDialog extends AppCompatDialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             successCallbacks.Success();
-                            main.juegoBantumi.inicializar(JuegoBantumi.Turno.turnoJ1);
+                            main.juegoBantumi.inicializar(MainActivity.jugador);
                         }
                     }
             )
