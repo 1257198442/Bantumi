@@ -26,8 +26,8 @@ import es.upm.miw.bantumi.R;
 import es.upm.miw.bantumi.roomdb.HistoriaDO;
 import es.upm.miw.bantumi.roomdb.HistoriaDao;
 import es.upm.miw.bantumi.roomdb.HistoriaDataBase;
-import es.upm.miw.bantumi.sqlitedb.Historia;
-import es.upm.miw.bantumi.sqlitedb.RepoHistoriaSQLiteOpenHelper;
+//import es.upm.miw.bantumi.sqlitedb.Historia;
+//import es.upm.miw.bantumi.sqlitedb.RepoHistoriaSQLiteOpenHelper;
 
 public class HistoriaListActivity extends AppCompatActivity {
     //sqlite
