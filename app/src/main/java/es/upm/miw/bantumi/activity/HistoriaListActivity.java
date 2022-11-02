@@ -1,18 +1,25 @@
 package es.upm.miw.bantumi.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import es.upm.miw.bantumi.component.ComparedComponent;
 import es.upm.miw.bantumi.R;
@@ -27,6 +34,8 @@ public class HistoriaListActivity extends AppCompatActivity {
 //    RepoHistoriaSQLiteOpenHelper db;
 //    List<Historia> list;
     HistoriaDao historiaDao;
+    private Spinner spinner;
+    List<HistoriaDO> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +46,8 @@ public class HistoriaListActivity extends AppCompatActivity {
 //        this.db = new RepoHistoriaSQLiteOpenHelper(getApplicationContext());
 //        list = this.db.getAll();
         historiaDao = HistoriaDataBase.getInstance(this).getHistoriaDao();
-        List<HistoriaDO> list = historiaDao.getAll();
-        load(list);
+        todoDato();
+        fitrarJugadores();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,5 +99,43 @@ public class HistoriaListActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void fitrarJugadores(){
+       List<String> jugadoreslList = historiaDao.getAllJugadores1();
+       jugadoreslList.addAll(historiaDao.getAllJugadores2());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            jugadoreslList=jugadoreslList.stream().distinct().collect(Collectors.toList());
+        }
+        spinner=findViewById(R.id.filtrar_jugadores);
+       jugadoreslList.add(0,"Todo");
+       ArrayAdapter<String> adapter = new ArrayAdapter<>(this,androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,jugadoreslList);
+       adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+       spinner.setAdapter(adapter);
+        List<String> finalJugadoreslList = jugadoreslList;
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(finalJugadoreslList.get(position)!="Todo"){
+                    jugadoresDato(finalJugadoreslList.get(position));
+                }else {
+                    todoDato();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    public void todoDato(){
+        list = historiaDao.getAll();
+        load(list);
+    }
+
+    public void jugadoresDato(String jugadore){
+        list = historiaDao.getByGanadores(jugadore);
+        load(list);
     }
 }
